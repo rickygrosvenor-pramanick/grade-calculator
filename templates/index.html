@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weighted Grade Calculator</title>
+</head>
+<body>
+    <h1>Weighted Grade Calculator</h1>
+    <form method="post">
+        <label>Number of Completed Assignments:</label>
+        <input type="number" name="num_completed" required><br>
+
+        <div id="completedAssignments"></div>
+
+        <label>Number of Remaining Assignments:</label>
+        <input type="number" name="num_remaining" required><br>
+
+        <div id="remainingAssignments"></div>
+
+        <label>Target Final Grade (%):</label>
+        <input type="number" name="target_grade" step="0.01" required><br>
+
+        <button type="submit">Calculate</button>
+    </form>
+
+    {% if current_grade is not none %}
+        <h2>Your Current Weighted Grade: {{ current_grade|round(2) }}%</h2>
+    {% endif %}
+    
+    {% if result %}
+        <h2>{{ result }}</h2>
+    {% endif %}
+
+    <script>
+        document.querySelector("input[name='num_completed']").addEventListener("input", function() {
+            let container = document.getElementById("completedAssignments");
+            container.innerHTML = "";
+            for (let i = 0; i < this.value; i++) {
+                container.innerHTML += `<label>Grade for Assignment ${i + 1}:</label>
+                <input type="number" name="grade_${i}" step="0.01" required>
+                <label>Weight (%):</label>
+                <input type="number" name="weight_${i}" step="0.01" required><br>`;
+            }
+        });
+
+        document.querySelector("input[name='num_remaining']").addEventListener("input", function() {
+            let container = document.getElementById("remainingAssignments");
+            container.innerHTML = "";
+            for (let i = 0; i < this.value; i++) {
+                container.innerHTML += `<label>Weight for Remaining Assignment ${i + 1} (%):</label>
+                <input type="number" name="rem_weight_${i}" step="0.01" required><br>`;
+            }
+        });
+    </script>
+</body>
+</html>
